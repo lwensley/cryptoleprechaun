@@ -18,7 +18,11 @@ app = Flask(__name__)
 # Database Setup
 #################################################
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sql:///db/CryptoL_db.sql"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/7mos_test_data.sql"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/CryptoL_db.sql"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/7mos_test_data.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/data.db"
+
 db = SQLAlchemy(app)
 
 # reflect an existing database into a new model
@@ -27,26 +31,13 @@ Base = automap_base()
 Base.prepare(db.engine, reflect=True)
 
 # Save references to each table
-BitMEX_Test_Data = Base.classes.BitMEX_Test_Data
-Test_Data = Base.classes.Test_Data
+Test_Data = Base.class.data
 
 
 @app.route("/")
 def index():
     """Return the homepage."""
     return render_template("index.html")
-
-
-@app.route("/dataheaders")
-def dataheaders():
-    """Return a list of data headers."""
-
-    # Use Pandas to perform the sql query
-    stmt = db.session.query(Test_Data).statement
-    df = pd.read_sql_query(stmt, db.session.bind)
-
-    # Return a list of the column names
-    return jsonify(list(df.columns)[2:])
 
 
 @app.route("/testdata")
@@ -81,7 +72,6 @@ def testdata():
         test_data["bitfinex_funding"] = result[8]
         test_data["Date"] = result[9]
 
-    print(test_data)
     return jsonify(test_data)
 
 

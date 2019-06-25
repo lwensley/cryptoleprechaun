@@ -1,5 +1,25 @@
 # cryptoleprechaun
 
+
+#to convert csv to sqlite
+
+https://github.com/simonw/csvs-to-sqlite/blob/master/README.md
+
+* In terminal:
+pip install csvs-to-sqlite
+
+* to create a new SQLite database called mydatabase.db containing a single table, myfile, containing the CSV content.
+csvs-to-sqlite myfile.csv mydatabase.db
+
+csvs-to-sqlite 7mos_test_data.csv 7mos_test_data.db
+
+* provide multiple CSV files. The bundle.db database will contain two tables, one and two.
+csvs-to-sqlite one.csv two.csv bundle.db
+
+
+
+
+
 * In terminal:
 
 * Create new environment
