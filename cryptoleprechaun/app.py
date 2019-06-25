@@ -25,13 +25,19 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/data.db"
 
 db = SQLAlchemy(app)
 
+  # DATABASE_URL will contain the database connection string:
+  # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
+  # Connects to the database using the app config
+  #db = SQLAlchemy(app)
+
+
 # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
 Base.prepare(db.engine, reflect=True)
 
 # Save references to each table
-Test_Data = Base.class.data
+Test_Data = Base.classes.data
 
 
 @app.route("/")
