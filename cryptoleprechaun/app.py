@@ -17,11 +17,11 @@ app = Flask(__name__)
 # Database Setup
 #################################################
 
-# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./db/data.sqlite"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./db/data.sqlite"
 # db = SQLAlchemy(app)
 
 # DATABASE_URL will contain the database connection string:
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://ezcxwpwucotggc:f366b3cf7ed5c8f76736ace195783d7396ed39e2b7941ad5316cc29d514ecc72@ec2-174-129-227-146.compute-1.amazonaws.com:5432/d5eljethbtap0k') or "sqlite:///./db/data.sqlite"
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://ezcxwpwucotggc:f366b3cf7ed5c8f76736ace195783d7396ed39e2b7941ad5316cc29d514ecc72@ec2-174-129-227-146.compute-1.amazonaws.com:5432/d5eljethbtap0k') or "sqlite:///./db/data.sqlite"
 # Connects to the database using the app config
 db = SQLAlchemy(app)
 
