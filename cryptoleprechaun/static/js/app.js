@@ -1,6 +1,22 @@
+// start and end for main charts/slider
+var start_date = 20190318; // has to be smaller than last date in csv file 
+var end_date = 20190618; // should be last date in the csv file 
+var trends_start_date; // for passing start to goog trends widget 
+var trends_end_date;
+
+// $("#slider").dateRangeSlider({ //date range slider setup max and min dates the $ in front just means it's jquery 
+// bounds:{
+//   min: new Date(2018, 05, 18), // ***need to make sure we have the data within this max min range****   
+//   max: new Date(2019, 05, 18) // these dates are objects not strings and month starts zero so subtract one from the month number
+//   }
+// });
+// $("#slider").dateRangeSlider("values", new Date(2019, 02, 18), new Date(2019, 05, 18)); // this sets the default values of the slider tab (and chart) 
+
+
+
 function makeResponsive() {
 
-  // SET VARIABLES AND CONSTANTS
+  // first SET VARIABLES AND CONSTANTS
 
   var svgWidth = window.innerWidth;
   var svgHeight = window.innerHeight; 
@@ -22,7 +38,7 @@ function makeResponsive() {
 
 
   // Parse the date / time
-  var parseDate = d3.timeParse("%e %b %y"); // this is D3v4 version, hopefully works 
+  //var parseDate = d3.timeParse("%e %b %y"); // this is D3v4 version, hopefully works 
 
 
   //Clear SVG --> required for "make responsive" function
@@ -50,12 +66,12 @@ function makeResponsive() {
   // CREATE FUNCTIONS
 
   // function used for updating indicator scale variable upon click on indicator axis label
-  function iScale(data, chosenIaxis, indicator_win_height) {
+  function iScale(selectdata, chosenIaxis, indicator_win_height) {
    
     // create scales
     var iLinearScale = d3.scaleLinear()
 
-      .domain([d3.max(data, d => d[chosenIaxis]), d3.min(data, d => d[chosenIaxis])])
+      .domain([d3.max(selectdata, d => d[chosenIaxis]), d3.min(selectdata, d => d[chosenIaxis])])
       .range([0, (indicator_win_height)]); //
 
       return iLinearScale;
@@ -76,6 +92,7 @@ function makeResponsive() {
     return iAxis;
   }
 
+
   // function used for updating lines group with a transition to new lines
   function renderLines(iLinesGroup, ind_values, bar_width, i, min_i, i_scaler) {
 
@@ -88,7 +105,7 @@ function makeResponsive() {
       .attr("y2", indicator_win_height+candle_win_height-(ind_values[i]-min_i)*i_scaler+margin.top) // y pos for current
 
     // updateToolTip function above csv import
-    iLinesGroup = updateToolTip(chosenIaxis, iLinesGroup, ind_values, i);
+    iLinesGroup = updateToolTip(selectdata, chosenIaxis, iLinesGroup, ind_values, i);
 
     return iLinesGroup;
 
@@ -96,7 +113,7 @@ function makeResponsive() {
 
 
   // function used for updating indicator group with new tooltip
-  function updateToolTip(chosenIaxis, iLinesGroup, ind_values, i) {
+  function updateToolTip(selectdata, chosenIaxis, iLinesGroup, ind_values, i) {
 
     if (chosenIaxis === "bitfinex_shorts") {
       var labeli = "Shorts: ";
@@ -106,13 +123,20 @@ function makeResponsive() {
       var labeli = "Dominance: ";
     }
 
+    // format tooltip data
+    var datei = selectdata[i]["date (formatted)"];
+    datei = formatDate2(datei);
+
+    var valuei = ind_values[i];
+    valuei = valuei.toFixed(2);
+
+
     var toolTip = d3.tip()
       .attr("class", "d3-tip")
       .offset([0, 0])
-      .html(function(d) { 
-        // console.log(d)
-        // return (`${d.date}<br>${labeli} ${d[chosenIaxis]}<br>${labeli} ${d[chosenIaxis]}`);
-        return (`${labeli} <br> ${d.date[i]} ${ind_values[i]}`);
+      .html(function() { 
+        // console.log(selectdata[i]["date (formatted)"])
+        return (`${labeli} <br> ${datei} ${"$" + valuei}`);
       });
 
     iLinesGroup.call(toolTip);
@@ -129,47 +153,157 @@ function makeResponsive() {
   }
 
 
+
   // SET FIRST CHOSEN INDICATOR
   var chosenIaxis = "bitfinex_shorts";
 
 
+
+// PARSE DATE/TIME FUNCTIONS
+
+// Instuctionrs: https://github.com/d3/d3-time-format/blob/master/README.md
+
+  //var formatTime = d3.timeFormat("%e-%b-%y"); // output Jan 1, 2014
+  //formatTime(new Date); // "June 30, 2015"
+  // var parseDate = d3.timeParse("%Y%m%d"); //input 20180926 format   
+  var parseDate2 = d3.timeParse("%Y-%m-%d"); //input 20180926 format 
+
+  // var startdate = parseDate(start_date);
+  // var enddate = parseDate(end_date);
+  // console.log(startdate)
+  // console.log(enddate)
+
+  var formatDate = d3.timeFormat("%Y%m%d");
+  var formatDate2 = d3.timeFormat("%e %b %y");
+
+
+// START OF ACTIONABLE CODE
+
   // get data from CSV and parse the date 
-  d3.json(`/btc_data`).then( function(data)  {
+  d3.json(`/btc_data`).then(function(data)  {
+
+    // convert json data to more readable format
+    data = data[0]
+    // console.log(data)
+
+    // get date (as a string)
+    var date_str = data["date"];
+    // console.log(date_str)
+
+    // convert date to number
+    var date_parse = [];
+    for (x in date_str) {
+      datex = parseDate2(date_str[x])
+      date_parse.push(datex);
+    }
+    // console.log(date)
+    var date_alldata = []
+    for (x in date_parse) {
+      datex = formatDate(date_parse[x])
+      date_alldata.push(+datex);
+    }
+    // console.log(date_alldata)
     
-    var low=[];
-    var open=[];
-    var high=[];
-    var low=[];
-    var close=[];
-    var volume=[];
 
-    var finex_shorts=[]; 
-    var finex_leveraged_longs=[];
-    var finex_unit_volume=[];
-    var bitcoin_dominance=[];
-    var bitmex_funding=[]
+    // pull remaining data from JSON page 
+    var open_alldata = data["open"];
+    var close_alldata = data["close"];
+    var high_alldata = data["high"];
+    var low_alldata = data["low"];
+    var volume_alldata = data["unit_volume"];
+    var finex_shorts_alldata = data["bitfinex_shorts"];
+    // finex_leveraged_longs_alldata = data["bitfinex_longs"];
+    var bitcoin_dominance_alldata = data["bitcoin_dominance"];
+    // bitmex_funding_alldata = data["bitmex_funding"];
 
-    data.forEach(function(d) {
-      low.push(+d.Low);
-      close.push(+d.Close);
-      open.push(+d.Open);
-      high.push(+d.High);
-      volume.push(+d.UnitVolume/1000);
-      finex_leveraged_longs.push(+d.bitfinex_longs);
-      finex_shorts.push(+d.bitfinex_shorts);
-      bitcoin_dominance.push(+d.bitcoin_dominance);
-      bitmex_funding.push(+d.bitmex_funding);
-      var year = d.Date.slice(0,4);
-      var month = d.Date.slice(4,6)+'-';
-      var day = d.Date.slice(6,8)+'-';
 
-      date = []
 
-      date.push(day.concat(month.concat(year))); // I should have ParseDate here but then nothing shows on x-axis 
+    // Create lists
+    var date = [];
+    var open = [];
+    var close = [];
+    var high = [];
+    var low = [];
+    var volume = [];
+    var finex_shorts = []; 
+    // var finex_leveraged_longs = [];
+    var bitcoin_dominance = [];
+    // var bitmex_funding = []
 
-    });
+    // calculate length of data
+    data_length = date_alldata.length;
+ 
+
+    // loop through and only pick-up data within start- and end- date
+    for (i = 0; i < data_length; i++) {
+
+      if (date_alldata[i] >= start_date) {
+        if (date_alldata[i] <= end_date) {
+            date.push(date_alldata[i]);
+            open.push(open_alldata[i]);
+            close.push(close_alldata[i]);
+            high.push(high_alldata[i]);
+            low.push(low_alldata[i]);
+            volume.push(volume_alldata[i]);
+            finex_shorts.push(finex_shorts_alldata[i]);
+            // finex_leveraged_longs.push(finex_leveraged_longs_alldata[i]);
+            bitcoin_dominance.push(bitcoin_dominance_alldata[i]);
+            // bitmex_funding.push(bitmex_funding_alldata[i]);
+        }
+      }
+    }
   
-    //variables for volume and candlestick size setup 
+    // convert date as number to date as date
+    var parseTime3 = d3.timeParse("%Y%m%d");
+        
+    var date_asdate = []
+    for (x in date) {
+      datex = parseTime3(date[x])
+      date_asdate.push(+datex);
+    }
+
+    // calculate length of new selected data
+    selected_data_length = date.length;
+
+    // combine new data into single object
+    selectdata = []
+
+    for (i = 0; i < selected_data_length; i++) {
+      datai = {"date (formatted)": date_asdate[i],
+               "date": date[i],
+              "open": open[i],
+              "close": close[i],
+              "high": high[i],
+              "low": low[i],
+              "volume": volume[i],
+              "bitfinex_shorts": finex_shorts[i],
+              // "finex_leveraged_longs": finex_leveraged_longs[i],
+              "bitcoin_dominance": bitcoin_dominance[i]
+              // "bitmex_funding": bitmex_funding[i]
+      }
+      selectdata.push(datai)
+    }
+
+    // console.log(selectdata)
+
+    console.log(d3.max(selectdata, d => d["bitcoin_dominance"]))
+
+
+      // //need to put start_date and end_date into right format for google trends widget  
+      // var year = start_date.slice(0,4)+"-";
+      // var month = start_date.slice(4,6)+"-";
+      // var day = start_date.slice(6,8);
+      // trends_start_date = year+month+day;
+      // console.log(trends_start_date);
+      // var year = end_date.slice(0,4)+"-";
+      // var month = end_date.slice(4,6)+"-";
+      // var day = end_date.slice(6,8);
+      // trends_end_date = year+month+day;
+      // console.log("trends start right after calculated 186 then end",trends_start_date, trends_end_date);
+      // //date.push(day.concat(month.concat(year))); // I should have ParseDate here but then nothing shows on x-axis 
+      // //goog_trends_date.push(year.concat(month.concat(day))); 
+  
+    // calcualate values for volume and candlestick size setup 
     var max_volume = Math.max.apply(0, volume);
     const vol_max_height = volume_win_ratio * candle_win_height;
     const vol_base=candle_win_height;  
@@ -184,17 +318,19 @@ function makeResponsive() {
 
     // set x-scale
     var xScale = d3.scaleTime()//scaleBand()
-      .domain([d3.min(date), d3.max(date)]) // need to parse the date I think  
+      .domain([d3.min(date_asdate), d3.max(date_asdate)]) // need to parse the date I think  
       .range([0, candle_win_width]);
     
     // create x-axis
     var xAxis = d3.axisBottom(xScale)
       .tickFormat(d3.timeFormat("%e %b %y"))// d3 v4 
-      .ticks(12); // this one is not working, I only get two 
+      .ticks(15); // working, correct cormat 
 
     // add x-axis to CandleChartGroup
     CandleChartGroup.append("g") 
       .attr("transform", `translate(${margin.left}, ${candle_win_height+margin.top})`) //x-axis ie date
+      .style("font", "12px sans-serif")
+      .style("stroke", "grey")
       .call(xAxis);
 
 
@@ -203,7 +339,7 @@ function makeResponsive() {
     // set y-scale for the candles
     var yScale = d3.scaleLinear()
       .domain([d3.max(high), d3.min(low)])
-      .range([0, candle_win_ratio*candle_win_height]);
+      .range([0, candle_win_height]); //was candle_win_ratio * ************************** */
     
     // create candle y-axis
     var yAxis = d3.axisLeft(yScale) //candlestick y axis 
@@ -239,7 +375,7 @@ function makeResponsive() {
     // CREATE INDICATOR Y-AXIS VARIABLES
 
     // set y-scale for indicator by calling indicator scale function "iScale"
-    var iLinearScale = iScale(data, chosenIaxis, indicator_win_height);
+    var iLinearScale = iScale(selectdata, chosenIaxis, indicator_win_height);
     
     // // create indicator y-axis
     var leftiAxis = d3.axisLeft(iLinearScale)
@@ -288,7 +424,7 @@ function makeResponsive() {
     );
 
 
-    // CHART BOARDERS
+    // CHART BORDERS
 
     // Append one rectangle for the candlesticks and the volume charts 
     CandleChartGroup.append("rect")
@@ -390,7 +526,7 @@ function makeResponsive() {
       const i_scaler =(indicator_win_height)/(max_i-min_i); //scaler for indicator 1
 
       var iLinesGroup = IndicatorChartGroup.append("line") // ********************************LINE for indicator ONE  *********
-        .data(data)
+        .data(selectdata)
         .style("stroke", "blue")
         .style("stroke-width", "2")
         .style("opacity", .4)
@@ -400,12 +536,12 @@ function makeResponsive() {
       iLinesGroup = renderLines(iLinesGroup, ind_values, bar_width, i, min_i, i_scaler);
 
       // updateToolTip function above csv import
-      iLinesGroup = updateToolTip(chosenIaxis, iLinesGroup, ind_values, i);
+      iLinesGroup = updateToolTip(selectdata, chosenIaxis, iLinesGroup, ind_values, i);
 
     }
 
 
-    // INDICATOR LABLES
+    // INDICATOR LABELS
 
     // Create group for  3 i-axis labels 
 
@@ -443,7 +579,7 @@ function makeResponsive() {
         // CREATE INDICATOR Y-AXIS
 
         // set y-scale for indicator by calling indicator scale function "iScale"
-        iLinearScale = iScale(data, chosenIaxis, indicator_win_height);
+        iLinearScale = iScale(selectdata, chosenIaxis, indicator_win_height);
 
         // set y-axis for indicator by calling indicator axis function "renderaxis"
         iAxis = renderIaxis(iLinearScale, iAxis);
@@ -465,14 +601,14 @@ function makeResponsive() {
         };
 
         // loop for creating indicator lines
-        for (i = 1; i < volume.length; i++) {   
+        for (i = 1; i < volume.length; i++) { //change from volume.length in future  
           
           const max_i = d3.max(ind_values);
           const min_i = d3.min(ind_values);
           const i_scaler =(indicator_win_height)/(max_i-min_i); //scaler for indicator 1
     
           var iLinesGroup = IndicatorChartGroup.append("line") // ********************************LINE for indicator ONE  *********
-            .data(data)  
+            .data(selectdata)  
             .style("stroke", "blue")
             .style("stroke-width", "2")
             .style("opacity", .4)
@@ -482,7 +618,7 @@ function makeResponsive() {
           iLinesGroup = renderLines(iLinesGroup, ind_values, bar_width, i, min_i, i_scaler);
 
           // updateToolTip function above csv import
-          iLinesGroup = updateToolTip(chosenIaxis, iLinesGroup, ind_values, i);
+          iLinesGroup = updateToolTip(selectdata, chosenIaxis, iLinesGroup, ind_values, i);
 
         }
 
@@ -509,8 +645,31 @@ function makeResponsive() {
 
 };
 
-// When the browser loads, makeResponsive() is called.
+// //below is the call to the google trends library 
+// console.log("trends start and end", trends_start_date,trends_end_date);
+// //below commented out line is what I want to pass but I'm getting 404 error 
+// //trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"how to buy bitcoin","geo":"US","time":"2018-09-26 2019-06-18"}],"category":0,"property":""}, {"exploreQuery":"date=2018-09-26%202019-06-18&geo=US&q=how%20to%20buy%20bitcoin","guestPath":"https://trends.google.com:443/trends/embed/"});
+// trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"how to buy bitcoin","geo":"US","time":trends_start_date+" "+trends_end_date}],"category":0,"property":""}, {"exploreQuery":"date="+trends_start_date+"%"+trends_end_date+"&geo=US&q=how%20to%20buy%20bitcoin","guestPath":"https://trends.google.com:443/trends/embed/"});
+
+// // When the browser loads, makeResponsive() is called.
+// //
+// $("#slider").bind("valuesChanged", function(e, data){ //this is the date slider main loop - tried "valuesChanged" but waaay slow 
+    
+//   // all the logic here after the arrays generated, closing bracket at bottom
+//   //console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
+// //  var d = new Date(dateString);  //I think the data.values.min is in datestring format, need to 
+//   start_date=new Date(data.values.min);
+//   end_date=new Date(data.values.max);
+//   var new_date_parse= d3.timeFormat("%Y%m%%d");
+//   start_date=new_date_parse(start_date); 
+//   end_date=new_date_parse(end_date);
+//   //console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date));
+//   makeResponsive();
+// }); // this is from slider code 
+
+
 makeResponsive();
 
 // When the browser window is resized, makeResponsive() is called.
 d3.select(window).on("resize", makeResponsive);
+//console.log("gets to the very end ");

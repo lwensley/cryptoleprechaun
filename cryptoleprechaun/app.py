@@ -145,7 +145,7 @@ def selected_btcdata():
     bitfinex_longs = [result[11] for result in results]
     bitfinex_volume = [result[12] for result in results]
     total_crypto_cap = [result[13] for result in results]
-    # bitcoin_dominance = [result[14] for result in results]
+    bitcoin_dominance = [result[14] for result in results]
     
     bitcoin_data = [{
         "date": date,
@@ -162,7 +162,7 @@ def selected_btcdata():
         "bitfinex_longs": bitfinex_longs,
         "bitfinex_volume": bitfinex_volume,
         "total_crypto_cap": total_crypto_cap,
-        # "bitcoin_dominance": bitcoin_dominance,
+        "bitcoin_dominance": bitcoin_dominance
     }]
 
 
