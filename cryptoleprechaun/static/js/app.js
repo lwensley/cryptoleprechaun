@@ -11,6 +11,7 @@ $("#slider").dateRangeSlider({ //date range slider setup max and min dates the $
    }
  });
  $("#slider").dateRangeSlider("values", new Date(2019, 02, 18), new Date(2019, 05, 18)); // this sets the default values of the slider tab (and chart) 
+console.log("right after slider set up code");
 
 function makeResponsive() {
 
@@ -196,7 +197,6 @@ function makeResponsive() {
     }
     // console.log(date_alldata)
     
-
     // pull remaining data from JSON page 
     var open_alldata = data["open"];
     var close_alldata = data["close"];
@@ -209,8 +209,6 @@ function makeResponsive() {
     var bitcoin_dominance_alldata = data["bitcoin_dominance"];
     var rolling_20_d_alldata = data["rolling_20_d"];
     // bitmex_funding_alldata = data["bitmex_funding"];
-
-
 
     // Create lists
     var date = [];
@@ -249,7 +247,6 @@ function makeResponsive() {
         }
       }
     }
-  
     // convert date as number to date as date
     var parseTime3 = d3.timeParse("%Y%m%d");
         
@@ -851,7 +848,7 @@ function makeResponsive() {
 
 $("#slider").bind("valuesChanged", function(e, data){ //this is the date slider main loop - tried "valuesChanged" but waaay slow 
   // all the logic here after the arrays generated, closing bracket at bottom
-  //console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
+  console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
 //  var d = new Date(dateString);  //I think the data.values.min is in datestring format, need to 
 start_date=new Date(data.values.min);
 end_date=new Date(data.values.max);
