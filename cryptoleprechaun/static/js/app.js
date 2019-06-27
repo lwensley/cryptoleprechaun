@@ -699,9 +699,9 @@ function makeResponsive() {
         indicator_5_label
             .classed("active", false)
             .classed("inactive", true);
-        indicator_6_label
-            .classed("active", false)
-            .classed("inactive", true);
+        // indicator_6_label
+        //     .classed("active", false)
+        //     .classed("inactive", true);
         }
         else if (chosenIaxis === "finex_leveraged_longs"){
         indicator_2_label
@@ -719,9 +719,9 @@ function makeResponsive() {
         indicator_5_label
           .classed("active", false)
           .classed("inactive", true);
-        indicator_6_label
-          .classed("active", false)
-          .classed("inactive", true);
+        // indicator_6_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
         }
         else if (chosenIaxis === "finex_volume"){
         indicator_3_label
@@ -739,9 +739,9 @@ function makeResponsive() {
         indicator_5_label
           .classed("active", false)
           .classed("inactive", true);
-        indicator_6_label
-          .classed("active", false)
-          .classed("inactive", true);
+        // indicator_6_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
         }
         else if (chosenIaxis === "bitcoin_dominance"){
         indicator_4_label
@@ -759,9 +759,9 @@ function makeResponsive() {
         indicator_5_label
           .classed("active", false)
           .classed("inactive", true);
-        indicator_6_label
-          .classed("active", false)
-          .classed("inactive", true);
+        // indicator_6_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
         }
         else if (chosenIaxis === "rolling_20_d"){
         indicator_5_label
@@ -779,9 +779,9 @@ function makeResponsive() {
         indicator_5_label
           .classed("active", false)
           .classed("inactive", true);
-        indicator_6_label
-          .classed("active", false)
-          .classed("inactive", true);
+        // indicator_6_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
         }
         // else if (chosenIaxis === "bitmex_funding"){
         // indicator_6_label
