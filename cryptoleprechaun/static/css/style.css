@@ -1,3 +1,16 @@
+.jumbotron {
+  background-image: url("https://media.giphy.com/media/nck0yE5BTqnuXhh3hl/giphy.gif");
+  background-size: cover;
+  height: 600px;
+  font-weight: bold;
+  color:  #43464b;
+  text-shadow: -2px 2px 0 #e2c20b;
+  margin-top: -5pt;
+  /* display: block;
+  margin-left: auto;
+  margin-right: auto */
+}
+
 .bar {
   fill: purple;
 }
@@ -22,16 +35,39 @@ body {
   padding-bottom: 80px;
 }
 
-#footer {
-  position: absolute;
+/* ----FOOTER START---- */
+.footer {
+  /* Positioning */
+  position: relative;
   bottom: 0;
-  width: 100%; /* Set the fixed height of the footer here */
-  height: 10px;
-  padding-top: 20px;
-  padding-bottom: 40px;
-  text-align: center;
-  background-color: #f5f5f5;
+
+  /* Box-model */
+  width: 100%;
+  height: 60px;
+  margin-top: 30px;
+
+  /* Visual */
+  background-color: rgb(206, 205, 205);
 }
+
+.text-muted-footer {
+  /* Positioning */
+  margin-top: 15px;
+
+  /* Typography */
+  color: #fff;
+}
+
+.two-toned-footer-color {
+  /* Box-model */
+  height: 6px;
+  padding-top: 3px;
+
+  /* Visual */
+  background-color: #9b9b9b;
+}
+
+/* ----FOOTER END---- */
 
 #footer p {
   margin: 0;

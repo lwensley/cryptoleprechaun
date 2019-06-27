@@ -1,27 +1,30 @@
 <!DOCTYPE html>
-<html lang="en"><!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Financial Plot</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-  <link rel="stylesheet" href="style.css">
+  <!-- <link rel="stylesheet" href="../css/style.css"> -->
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
 </head>
 
 <body>
-  <div class="container-fluid">
   <!-- Navbar set up to link to other pages as well as provide a quick link to take straight to the charts -->
-    <nav class="navbar navbar-default">
+
+  
+  
+  <nav class="navbar navbar-default">
       <div class="container-fluid navbar-custom">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="row">
@@ -32,7 +35,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <div class="col-xs-9 phone-nav">
+            <div class="col-md-9 col-md-offset-1">
               <a class="navbar-brand" href="#" id="logo">CryptoDash</a>
             </div>
           </div>
@@ -42,11 +45,14 @@
             <ul class="nav navbar-nav navbar-right navbar-right-custom">
               <li><a href="#charts">Bitcoin Charts</a></li>
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Project Info <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  Project Info 
+                  <span class="caret"></span>
+                </a>
                 <ul class="dropdown-menu">
-                  <li><a href="candlestick.html">Candstick Chart History</a></li>
-                  <li><a href="project_info.html">Project Info</a></li>
-                  <li><a href="project_team.html">Team Info</a></li>
+                  <li><a href="./candlestick.html">Candstick Chart History</a></li>
+                  <li><a href="./project_info.html">Project Info</a></li>
+                  <li><a href="./project_team.html">Team Info</a></li>
                 </ul>
               </li>
             </ul>
@@ -73,26 +79,54 @@
     <!-- <div class="row">
       <h2 class="text-center">Bitcoin Trading volume</h2>
     </div> -->
-    <div class="row" style="background #43464b">
+    <div class="row" style="background: #43464b">
       <div class="col-md-6 col-md-offset-1">
-          <h2>Bitcoin Trading Volume</h2>
+          <h2>Aggregate Exchange Bitcoin 1D Price & Volume</h2>
       </div>
       <!-- <div class="col-md-2 text-left">
         <h5>Select Date Range</h5>
       </div> -->
       <div class="col-md-3">
-        <h5 style="background #43464b">Select Date Range</h5>
-          <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+        <h5 style="background: #43464b">Select Date Range</h5>
+          <div id="reportrange" style="background-color:#fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
             <i class="fa fa-calendar"></i>&nbsp;
             <span></span> <i class="fa fa-caret-down"></i>
           </div>
-            <script type="text/javascript" src="{{ url_for('static', filename='js/datepicker.js') }}""></script>
+            <script type="text/javascript">
+            // This entire section will need to be transferred into the app.js file so that we can pull out 
+            $(function() {
+                // default is currently set to past 30 days
+                var start = moment().subtract(29, 'days');
+                var end = moment();
+            
+                function cb(start, end) {
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+            
+                $('#reportrange').daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    ranges: {
+                      //  'Today': [moment(), moment()],
+                       'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                      //  'This Month': [moment().startOf('month'), moment().endOf('month')],
+                      'This Year': [moment().startOf('year'), moment()],
+                      //  'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }, cb);
+            
+                cb(start, end);
+            
+            });
+            </script>
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div id="svg-area"></div>
-              <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+            <div id="svg-area" class="panel-body"></div>
+              <script type="text/javascript" src="static/js/app.js"></script>
           </div>
           <!-- insert descriptions of the different elements of our charts -->
           <div class="row">
@@ -119,9 +153,9 @@
         &copy; Copyright CryptoCrew 2019
       </p>
     </footer>
-  </div>
+
   
-<script src="plots.js"></script>
+<!-- <script src="static/js/plots.js"></script> -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -129,19 +163,4 @@
 
 </body>
 
-</html>
-
-<head>
-  <meta charset="utf-8">
-  <title>Data Rectangles</title>
-  <!---->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
-  <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://d3js.org/d3-time.v1.min.js"></script>
-  <link rel="stylesheet" href="static/style.css">
-</head>
-<body>
-  <div id="svg-area"></div>
-  <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
-</body>
 </html>

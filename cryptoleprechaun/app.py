@@ -13,31 +13,29 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-
 #################################################
 # Database Setup
 #################################################
 
-#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/7mos_test_data.sql"
-#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/CryptoL_db.sql"
-#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/7mos_test_data.db"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/data.db"
-
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./db/data.sqlite"
 db = SQLAlchemy(app)
-
-  # DATABASE_URL will contain the database connection string:
-  # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
-  # Connects to the database using the app config
-  #db = SQLAlchemy(app)
-
 
 # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
 Base.prepare(db.engine, reflect=True)
 
-# Save references to each table
-Test_Data = Base.classes.data
+# print out Table Names
+print("Database Table Names")
+print(db.engine.table_names())
+
+# make sure our table has a primary key otherwise it won't work with SQLAlchemy
+print("Database Tables that have Keys")
+print(Base.classes.keys())
+
+# Save references to the table
+BTC_Data = Base.classes.btc
+
 
 
 @app.route("/")
@@ -45,41 +43,68 @@ def index():
     """Return the homepage."""
     return render_template("index.html")
 
+@app.route("/candlestick")
+def candlestick():
+    
+    return render_template("candlestick.html")
 
-@app.route("/testdata")
-def testdata():
-    """Return the testdata"""
+@app.route("/project_info")
+def project_info():
+
+    return render_template("project_info.html")
+
+@app.route("/team_info")
+def team_info():
+
+    return render_template("team_info.html")
+
+
+@app.route("/names")
+def names():
+    """Return a list of sample names."""
+
+    # Use Pandas to perform the sql query
+    stmt = db.session.query(BTC_Data).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+
+    # Return a list of the column names (sample names)
+    return jsonify(list(df.columns)[2:])
+
+
+
+#vNeed to add in the path for once we select the data
+@app.route("/btc_data")
+def selected_btcdata():
+    # Return the data for the selected dates
     sel = [
-        Test_Data.Low,
-        Test_Data.Close,
-        Test_Data.Open,
-        Test_Data.High,
-        Test_Data.UnitVolume,
-        Test_Data.bitfinex_longs,
-        Test_Data.bitfinex_shorts,
-        Test_Data.bitfinex_dominance,
-        Test_Data.bitfinex_funding,
-        Test_Data.Date,
+        BTC_Data.date,
+        BTC_Data.open,
+        BTC_Data.high,
+        BTC_Data.low,
+        BTC_Data.close,
+        BTC_Data.volume,
+        BTC_Data.market_cap,
+        BTC_Data.unit_volume,
+        BTC_Data.rolling_20_d,
+        BTC_Data.date_2,
+        BTC_Data.bitfinex_shorts,
+        BTC_Data.bitfinex_longs,
+        BTC_Data.bitfinex_volume,
+        BTC_Data.total_crypto_cap,
+        BTC_Data.bitcoin_dominance,
+        BTC_Data.bitmex_funding
     ]
 
+    # results = db.session.query(*sel).filter(BTC_Data.date >= start).filter(BTC_Data <= end).all()
     results = db.session.query(*sel).all()
 
-    # Create a dictionary entry for each row of metadata information
-    test_data = {}
+    # Create a dictionary entry for each row of metadata
+    selected_btcdata = {}
     for result in results:
-        test_data["Low"] = result[0]
-        test_data["Close"] = result[1]
-        test_data["Open"] = result[2]
-        test_data["High"] = result[3]
-        test_data["UnitVolum"] = result[4]
-        test_data["bitfinex_long"] = result[5]
-        test_data["bitfinex_shorts"] = result[6]
-        test_data["bitfinex_dominance"] = result[7]
-        test_data["bitfinex_funding"] = result[8]
-        test_data["Date"] = result[9]
-
-    return jsonify(test_data)
-
+        BTC_Data
+    
+    print(selected_btcdata)
+    return jsonify(selected_btcdata)
 
 if __name__ == "__main__":
     app.run()
