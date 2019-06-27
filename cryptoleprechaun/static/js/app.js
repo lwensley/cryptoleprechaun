@@ -11,7 +11,7 @@ $("#slider").dateRangeSlider({ //date range slider setup max and min dates the $
    }
  });
  $("#slider").dateRangeSlider("values", new Date(2019, 02, 18), new Date(2019, 05, 18)); // this sets the default values of the slider tab (and chart) 
-console.log("right after slider set up code");
+
 
 function makeResponsive() {
 
@@ -847,17 +847,17 @@ function makeResponsive() {
       }}) //these brackets all look right to me ie match with my code but there is some error
   })
 }; 
-console.log("right before slider event loop");
+//console.log("right before slider event loop");
 $("#slider").bind("valuesChanged", function(e, data){ //this is the date slider main loop - tried "valuesChanged" but waaay slow 
   // all the logic here after the arrays generated, closing bracket at bottom
-console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
+//console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
 //  var d = new Date(dateString);  //I think the data.values.min is in datestring format, need to 
 start_date=new Date(data.values.min);
 end_date=new Date(data.values.max);
 var new_date_parse= d3.timeFormat("%Y%m%d");
 start_date=new_date_parse(start_date); 
 end_date=new_date_parse(end_date);
-console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date)); 
+//console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date)); 
 makeResponsive();
 }); // this is from slider code 
  
