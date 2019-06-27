@@ -845,7 +845,7 @@ function makeResponsive() {
       }}) //these brackets all look right to me ie match with my code but there is some error
   })
 }; 
-console.log("right before slider event loop);
+console.log("right before slider event loop");
 $("#slider").bind("valuesChanged", function(e, data){ //this is the date slider main loop - tried "valuesChanged" but waaay slow 
   // all the logic here after the arrays generated, closing bracket at bottom
   console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
