@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Financial Plot</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.9.2/d3.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <!-- <link rel="stylesheet" href="../css/style.css"> -->
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
+</head>
+
+<body>
+  <!-- Navbar set up to link to other pages as well as provide a quick link to take straight to the charts -->
+
+  
+  
+  <nav class="navbar navbar-default">
+      <div class="container-fluid navbar-custom">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="row">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle Navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <div class="col-md-9 col-md-offset-1">
+              <a class="navbar-brand" href="/" id="logo" style="position: relative; left:30px">CryptoDash</a>
+            </div>
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right navbar-right-custom">
+              <li><a href="#charts">Bitcoin Charts</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  Project Info 
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="/candlestick">Candstick Chart History</a></li>
+                  <li><a href="/project_info">Project Info</a></li>
+                  <!-- <li><a href="/team_info">Team Info</a></li> -->
+                </ul>
+              </li>
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div>
+      </div><!-- /.container-fluid -->
+    </nav>
+    <!-- End of navbar -->
+ <!-- Set up header image and project title -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1 jumbotron text-center">
+        <h1 class="header">Crypto Leprachaun</h1>
+        <h3 class="subheader">Analyzing your digital pot of gold!</h3>
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="center-block">
+        <img src="https://media.giphy.com/media/nck0yE5BTqnuXhh3hl/giphy.gif" class="center-block">
+    </div> -->
+  </div>
+  <div class="container-fluid">
+    <a name="charts"></a>
+    <!-- <div class="row">
+      <h2 class="text-center">Bitcoin Trading volume</h2>
+    </div> -->
+    <div class="row" style="background: #43464b">
+      <div class="col-md-6 col-md-offset-1">
+          <h2>Aggregate Exchange Bitcoin 1D Price & Volume</h2>
+      </div>
+      <!-- <div class="col-md-2 text-left">
+        <h5>Select Date Range</h5>
+      </div> -->
+      <div class="col-md-3">
+        <h5 style="background: #43464b">Select Date Range</h5>
+          <div id="reportrange" style="background-color:#fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+            <i class="fa fa-calendar"></i>&nbsp;
+            <span></span> <i class="fa fa-caret-down"></i>
+          </div>
+            <script type="text/javascript">
+            // This entire section will need to be transferred into the app.js file so that we can pull out 
+            $(function() {
+                // default is currently set to past 30 days
+                var start = moment().subtract(29, 'days');
+                var end = moment();
+            
+                function cb(start, end) {
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                }
+            
+                $('#reportrange').daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    ranges: {
+                      //  'Today': [moment(), moment()],
+                       'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                      //  'This Month': [moment().startOf('month'), moment().endOf('month')],
+                      'This Year': [moment().startOf('year'), moment()],
+                      //  'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }, cb);
+            
+                cb(start, end);
+            
+            });
+            </script>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div id="svg-area" class="panel-body"></div>
+              <script type="text/javascript" src="static/js/app.js"></script>
+          </div>
+          <!-- insert descriptions of the different elements of our charts -->
+          <div class="row">
+            <div class="col-md-4 col-md-offset-2">
+              <h4>Bitfinex Leveraged Longs</h4>
+              <p>Bitfinex is a margin exchange which discloses their outstanding leveraged long positions. When traders employ leverage this reflects bullish sentiment but margin positions tends to be shorter term in nature with tighter stop losses, therefore higher amount of margin longs = bearish.</p>
+            </div>
+            <div class="col-md-4">
+              <h4>Bitfinex Shorts</h4>
+              <p>Bitfinex is a margin exchange which discloses the number of short positions outstanding. The higher the number of outstanding short positions the higher the probability is that a short squeeze will be triggered, therefore higher number of shorts = bullish.</p>
+            </div>
+          </div>
+            <div class="col-md-10 col-md-offset-1" style="margin-top: 15pt; margin-bottom: 20pt">
+              <h3 class="header" style="margin-bottom: 20pt">Interest in Bitcoin</h3>
+              <script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/1845_RC03/embed_loader.js"></script> 
+              <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"how to buy bitcoin","geo":"US","time":"2018-09-26 2019-06-18"}],"category":0,"property":""}, {"exploreQuery":"date=2018-09-26%202019-06-18&geo=US&q=how%20to%20buy%20bitcoin","guestPath":"https://trends.google.com:443/trends/embed/"}); </script> 
+            </div>
+        </div>
+  </div>
+
+  <footer class="footer navbar-fixed-bottom">
+      <div class="two-toned-footer-color"></div>
+      <p class="text-muted text-muted-footer text-center">
+        &copy; Copyright CryptoCrew 2019
+      </p>
+    </footer>
+
+  
+<!-- <script src="static/js/plots.js"></script> -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+</body>
+
+</html>

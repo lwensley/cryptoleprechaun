@@ -49,17 +49,17 @@ def index():
     """Return the homepage."""
     return render_template("index.html")
 
-@app.route("/candlestick")
+@app.route("/candlestick/")
 def candlestick():
     
     return render_template("candlestick.html")
 
-@app.route("/project_info")
+@app.route("/project_info/")
 def project_info():
 
     return render_template("project_info.html")
 
-@app.route("/team_info")
+@app.route("/team_info/")
 def team_info():
 
     return render_template("team_info.html")
