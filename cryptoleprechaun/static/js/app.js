@@ -623,7 +623,7 @@ function makeResponsive() {
     //   .text("Bitmex funding");
 
     var Note1= ilabelsGroup.append("text")
-      .attr("x", indicator_win_width/2 * 4/5)         // set x position of left side of text
+      .attr("x", indicator_win_width/2 * 3/4)         // set x position of left side of text
       .attr("y", -(indicator_win_height + 1/3 *  candle_win_height) -45) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .style("fill", "grey")
@@ -633,7 +633,7 @@ function makeResponsive() {
 
     var Note2 = ilabelsGroup.append("text")
       .attr("x", indicator_win_width/2 * 3/4)         // set x position of left side of text
-      .attr("y", -(indicator_win_height + 1/3 *  candle_win_height - 30)) // set y position of bottom of text
+      .attr("y", -(indicator_win_height + 1/3 *  candle_win_height) - 30) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .style("fill", "grey")
       .attr("text-anchor", "start")
@@ -642,7 +642,7 @@ function makeResponsive() {
 
     var Note3 = ilabelsGroup.append("text")
       .attr("x", indicator_win_width/2 * 3/4)         // set x position of left side of text
-      .attr("y", -(indicator_win_height + 1/3 *  candle_win_height - 15)) // set y position of bottom of text
+      .attr("y", -(indicator_win_height + 1/3 *  candle_win_height) - 15) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .style("fill", "grey")
       .attr("text-anchor", "start")
@@ -651,7 +651,7 @@ function makeResponsive() {
       
     var Note4 = ilabelsGroup.append("text")
       .attr("x", indicator_win_width/2 * 3/4)         // set x position of left side of text
-      .attr("y", -(indicator_win_height + 1/3 *  candle_win_height - 0)) // set y position of bottom of text
+      .attr("y", -(indicator_win_height + 1/3 *  candle_win_height) - 0) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .style("fill","grey")
       .attr("text-anchor", "start")
