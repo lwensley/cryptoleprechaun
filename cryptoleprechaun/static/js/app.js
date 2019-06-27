@@ -567,7 +567,7 @@ function makeResponsive() {
     // Create group for  3 i-axis labels 
 
     var ilabelsGroup = IndicatorChartGroup.append("g")
-          .attr("transform", `translate(${margin.left}, ${(candle_win_height + indicator_win_height + margin.top+15)})`)
+          .attr("transform", `translate(${indicator_win_width/2 + margin.left}, ${(candle_win_height + indicator_win_height + margin.top+15)})`)
 
     var indicator_1_label = ilabelsGroup.append("text")
       .attr("x", 0)         // set x position of left side of text
@@ -623,8 +623,8 @@ function makeResponsive() {
     //   .text("Bitmex funding");
 
     var Note1= ilabelsGroup.append("text")
-      .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
-      .attr("y", 20) // set y position of bottom of text
+      .attr("x", indicator_win_width * 4/5)         // set x position of left side of text
+      .attr("y", -200) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .style("fill", "grey")
       .attr("text-anchor", "start")
@@ -633,7 +633,7 @@ function makeResponsive() {
 
     var Note2 = ilabelsGroup.append("text")
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
-      .attr("y", 35) // set y position of bottom of text
+      .attr("y", -215) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .style("fill", "grey")
       .attr("text-anchor", "start")
@@ -642,7 +642,7 @@ function makeResponsive() {
 
     var Note3 = ilabelsGroup.append("text")
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
-      .attr("y", 50) // set y position of bottom of text
+      .attr("y", -230) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .style("fill", "grey")
       .attr("text-anchor", "start")
@@ -651,7 +651,7 @@ function makeResponsive() {
       
     var Note4 = ilabelsGroup.append("text")
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
-      .attr("y", 65) // set y position of bottom of text
+      .attr("y", -245) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .style("fill","grey")
       .attr("text-anchor", "start")
