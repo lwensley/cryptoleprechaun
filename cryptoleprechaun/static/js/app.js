@@ -158,7 +158,7 @@ function makeResponsive() {
   //formatTime(new Date); // "June 30, 2015"
   var parseDate = d3.timeParse("%Y%d%e"); //  
   //var parseDate = d3.timeParse("%Y%m%d"); //input 20180926 format   
-  //var parseDate2 = d3.timeParse("%Y-%m-%d"); //I think this is for drop down datepicker 
+  var parseDate2 = d3.timeParse("%Y-%m-%d"); //I think this is for drop down datepicker 
 
   // var startdate = parseDate(start_date);
   // var enddate = parseDate(end_date);
