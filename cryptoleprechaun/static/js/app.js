@@ -617,12 +617,33 @@ function makeResponsive() {
     //   .classed("inactive", true)
     //   .text("Bitmex funding");
 
-    var Legend = ilabelsGroup.append("text")
-      .attr("x", indicator_win_width)         // set x position of left side of text
+    var Note1= ilabelsGroup.append("text")
+      .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 20) // set y position of bottom of text
       .style("font", "12px sans-serif")
       .classed("active", true)
-      .text("NOTE: Green indicates that the <br> close value for that date is higher <br> than the close value for the previous day. <br> Red indicates the opposite");
+      .text("NOTE: Green indicates that the");
+
+    var Note2 = ilabelsGroup.append("text")
+      .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
+      .attr("y", 40) // set y position of bottom of text
+      .style("font", "12px sans-serif")
+      .classed("active", true)
+      .text("close value for that date is higher");
+
+    var Note3 = ilabelsGroup.append("text")
+      .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
+      .attr("y", 60) // set y position of bottom of text
+      .style("font", "12px sans-serif")
+      .classed("active", true)
+      .text("than the close value for the previous day.");
+      
+    var Note4 = ilabelsGroup.append("text")
+      .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
+      .attr("y", 80) // set y position of bottom of text
+      .style("font", "12px sans-serif")
+      .classed("active", true)
+      .text("Red indicates the opposite.");
 
 
     // INDICATOR EVENT LISTENER
@@ -656,8 +677,25 @@ function makeResponsive() {
         if (chosenIaxis === "bitfinex_shorts") {
           var ind_values = finex_shorts;
         }
-        else {
+
+        else if (chosenIaxis === "finex_leveraged_longs") {
+          var ind_values = finex_leveraged_longs;
+        }
+
+        else if (chosenIaxis === "finex_volume") {
+          var ind_values = finex_volume;
+        }
+
+        else if (chosenIaxis === "bitcoin_dominance") {
           var ind_values = bitcoin_dominance;
+        }
+
+        else if (chosenIaxis === "rolling_20_d") {
+          var ind_values = rolling_20_d;
+        }
+
+        else if (chosenIaxis === "bitmex_funding") {
+          var ind_values = bitmex_funding;
         };
 
         // loop for creating indicator lines
@@ -773,10 +811,10 @@ function makeResponsive() {
         indicator_2_label
           .classed("active", false)
           .classed("inactive", true);
-        indicator_4_label
+        indicator_3_label
           .classed("active", false)
           .classed("inactive", true);
-        indicator_5_label
+        indicator_4_label
           .classed("active", false)
           .classed("inactive", true);
         // indicator_6_label
