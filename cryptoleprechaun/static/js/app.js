@@ -568,12 +568,12 @@ function makeResponsive() {
 
     var ilabelsGroup = IndicatorChartGroup.append("g")
           .attr("transform", `translate(${margin.left}, ${(candle_win_height + indicator_win_height + margin.top+15)})`)
-          .attr("text-anchor", "end")
 
     var indicator_1_label = ilabelsGroup.append("text")
       .attr("x", 0)         // set x position of left side of text
       .attr("y", 20) // set y position of bottom of text
       .attr("value", "bitfinex_shorts")
+      .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("active", true)
       .text("BitFinex Short Contracts ($)");
@@ -582,6 +582,7 @@ function makeResponsive() {
       .attr("x",0)         // set x position of left side of text
       .attr("y", 40) // set y position of bottom of text
       .attr("value", "finex_leveraged_longs")
+      .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("inactive", true)
       .text("Longs");
@@ -590,6 +591,7 @@ function makeResponsive() {
       .attr("x",0)         // set x position of left side of text
       .attr("y", 60) // set y position of bottom of text
       .attr("value", "finex_volume")
+      .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("inactive", true)
       .text("TE");
@@ -598,6 +600,7 @@ function makeResponsive() {
       .attr("x",0)         // set x position of left side of text
       .attr("y", 80) // set y position of bottom of text
       .attr("value", "bitcoin_dominance")
+      .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("inactive", true)
       .text("Bitcoin Dominance (% of total cap)");
@@ -606,6 +609,7 @@ function makeResponsive() {
       .attr("x",0)         // set x position of left side of text
       .attr("y", 100) // set y position of bottom of text
       .attr("value", "rolling_20_d")
+      .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("inactive", true)
       .text("Rolling 20 day");
@@ -622,6 +626,8 @@ function makeResponsive() {
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 20) // set y position of bottom of text
       .style("font", "12px sans-serif")
+      .style("fill", grey)
+      .attr("text-anchor", "start")
       .classed("active", true)
       .text("NOTE: Green indicates that the");
 
@@ -629,6 +635,8 @@ function makeResponsive() {
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 35) // set y position of bottom of text
       .style("font", "12px sans-serif")
+      .style("fill", grey)
+      .attr("text-anchor", "start")
       .classed("active", true)
       .text("close value for that date is higher");
 
@@ -636,6 +644,8 @@ function makeResponsive() {
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 50) // set y position of bottom of text
       .style("font", "12px sans-serif")
+      .style("fill", grey)
+      .attr("text-anchor", "start")
       .classed("active", true)
       .text("than the close value for the previous day.");
       
@@ -643,6 +653,8 @@ function makeResponsive() {
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 65) // set y position of bottom of text
       .style("font", "12px sans-serif")
+      .style("fill", grey)
+      .attr("text-anchor", "start")
       .classed("active", true)
       .text("Red indicates the opposite.");
 
