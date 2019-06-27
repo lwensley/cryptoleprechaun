@@ -17,8 +17,14 @@ app = Flask(__name__)
 # Database Setup
 #################################################
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./db/data.sqlite"
+# app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./db/data.sqlite"
+# db = SQLAlchemy(app)
+
+# DATABASE_URL will contain the database connection string:
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres://ezcxwpwucotggc:f366b3cf7ed5c8f76736ace195783d7396ed39e2b7941ad5316cc29d514ecc72@ec2-174-129-227-146.compute-1.amazonaws.com:5432/d5eljethbtap0k') or "sqlite:///./db/data.sqlite"
+# Connects to the database using the app config
 db = SQLAlchemy(app)
+
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -36,7 +42,7 @@ print(Base.classes.keys())
 # Save references to the table
 BTC_Data = Base.classes.btc
 
-
+print(BTC_Data)
 
 @app.route("/")
 def index():
@@ -71,8 +77,70 @@ def names():
     return jsonify(list(df.columns)[2:])
 
 
+from .datatable import data
 
-#vNeed to add in the path for once we select the data
+@app.route("/api/data")
+def data():
+
+    results = db.session.query(DataTable.date,
+                                DataTable.open,
+                                DataTable.high,
+                                DataTable.low,
+                                DataTable.close,
+                                DataTable.volume,
+                                DataTable.market_cap,
+                                DataTable.unit_volume,
+                                DataTable.rolling_20_d,
+                                DataTable.date_2,
+                                DataTable.bitfinex_shorts,
+                                DataTable.bitfinex_longs,
+                                DataTable.bitfinex_volume,
+                                DataTable.total_crypto_cap,
+                                DataTable.bitcoin_dominance,
+                                DataTable.bitmex_funding).all()
+
+    date = [result[0] for result in results]
+    open = [result[1] for result in results]
+    high = [result[2] for result in results]
+    low = [result[3] for result in results]
+    close = [result[4] for result in results]
+    volume = [result[5] for result in results]
+    market_cap = [result[6] for result in results]
+    unit_volume = [result[7] for result in results]
+    rolling_20_d = [result[8] for result in results]
+    date_2 = [result[9] for result in results]
+    bitfinex_shorts = [result[10] for result in results]
+    bitfinex_longs = [result[11] for result in results]
+    bitfinex_volume = [result[12] for result in results]
+    total_crypto_cap = [result[13] for result in results]
+    bitcoin_dominance = [result[14] for result in results]
+    bitmex_funding = [result[15] for result in results]
+    
+    bitcoin_data = [{
+        "date": date,
+        "open": open,
+        "high": high,
+        "low": low,
+        "close": close,
+        "volume": volume,
+        "market_cap": market_cap,
+        "unit_volume": unit_volume,
+        "rolling_20_d": rolling_20_d,
+        "date_2": date_2,
+        "bitfinex_shorts": bitfinex_shorts,
+        "bitfinex_longs": bitfinex_longs,
+        "bitfinex_volume": bitfinex_volume,
+        "total_crypto_cap": total_crypto_cap,
+        "bitcoin_dominance": bitcoin_dominance,
+        "bitmex_funding": bitmex_funding,
+    }]
+
+    return jsonify(bitcoin_data)
+
+
+
+
+# Need to add in the path for once we select the data
 @app.route("/btc_data")
 def selected_btcdata():
     # Return the data for the selected dates
@@ -97,7 +165,7 @@ def selected_btcdata():
 
     # results = db.session.query(*sel).filter(BTC_Data.date >= start).filter(BTC_Data <= end).all()
     results = db.session.query(*sel).all()
-
+    print(results)
     # Create a dictionary entry for each row of metadata
     selected_btcdata = {}
     for result in results:
