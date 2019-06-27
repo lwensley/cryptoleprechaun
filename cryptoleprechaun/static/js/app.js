@@ -854,7 +854,7 @@ $("#slider").bind("valuesChanged", function(e, data){ //this is the date slider 
 //  var d = new Date(dateString);  //I think the data.values.min is in datestring format, need to 
 start_date=new Date(data.values.min);
 end_date=new Date(data.values.max);
-var new_date_parse= d3.timeFormat("%Y%m%%d");
+var new_date_parse= d3.timeFormat("%Y%m%d");
 start_date=new_date_parse(start_date); 
 end_date=new_date_parse(end_date);
 console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date)); 
