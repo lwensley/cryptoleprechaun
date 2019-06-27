@@ -566,7 +566,7 @@ function makeResponsive() {
       .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("active", true)
-      .text("BitFinex Short Contracts ($)");
+      .text("Bitfinex Short Contracts");
 
     var indicator_2_label = ilabelsGroup.append("text")//indicator_2 axis right side
       .attr("x",0)         // set x position of left side of text
@@ -575,7 +575,7 @@ function makeResponsive() {
       .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("inactive", true)
-      .text("Longs");
+      .text("Bitfinex Margin Longs");
 
     var indicator_3_label = ilabelsGroup.append("text")//indicator_2 axis right side
       .attr("x",0)         // set x position of left side of text
@@ -584,7 +584,7 @@ function makeResponsive() {
       .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("inactive", true)
-      .text("TE");
+      .text("Bitfinex Trading Volume");
 
     var indicator_4_label = ilabelsGroup.append("text")//indicator_2 axis right side
       .attr("x",0)         // set x position of left side of text
@@ -593,7 +593,7 @@ function makeResponsive() {
       .attr("text-anchor", "end")
       .style("font", "12px sans-serif")
       .classed("inactive", true)
-      .text("Bitcoin Dominance (% of total cap)");
+      .text("Bitcoin Dominance (% of total crypto cap)");
 
     var indicator_5_label = ilabelsGroup.append("text")//indicator_2 axis right side
       .attr("x",0)         // set x position of left side of text
