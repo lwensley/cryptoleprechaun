@@ -564,6 +564,13 @@ function makeResponsive() {
       .classed("inactive", true)
       .text("Bitcoin Dominance (% of total cap)");
 
+    var Legend = ilabelsGroup.append("text")
+      .attr("x", indicator_win_width)         // set x position of left side of text
+      .attr("y", 20) // set y position of bottom of text
+      .attr("value", "bitfinex_shorts")
+      .style("font", "12px sans-serif")
+      .text("NOTE: Green indicates that the <br> close value for that date is higher <br> than the close value for the previous day. <br> Red indicates the opposite");
+
 
     // INDICATOR EVENT LISTENER
     ilabelsGroup.selectAll("text").on("click", function() {
