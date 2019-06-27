@@ -229,7 +229,7 @@ function makeResponsive() {
  
     // loop through and only pick-up data within start- and end- date
     for (i = 0; i < data_length; i++) {
-
+    console.log("date_alldata[i] then typeof", date_alldata[i], typeof(date_alldata[i]));
       if (date_alldata[i] >= start_date) {
         if (date_alldata[i] <= end_date) {
             date.push(date_alldata[i]);
@@ -848,14 +848,14 @@ function makeResponsive() {
 console.log("right before slider event loop");
 $("#slider").bind("valuesChanged", function(e, data){ //this is the date slider main loop - tried "valuesChanged" but waaay slow 
   // all the logic here after the arrays generated, closing bracket at bottom
-  console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
+ // console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
 //  var d = new Date(dateString);  //I think the data.values.min is in datestring format, need to 
 start_date=new Date(data.values.min);
 end_date=new Date(data.values.max);
 var new_date_parse= d3.timeFormat("%Y%m%%d");
 start_date=new_date_parse(start_date); 
 end_date=new_date_parse(end_date);
-//console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date)); 
+console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date)); 
 makeResponsive();
 }); // this is from slider code 
  
