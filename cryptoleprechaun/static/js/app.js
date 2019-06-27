@@ -1,18 +1,16 @@
 // start and end for main charts/slider
-var start_date = 20190318; // has to be smaller than last date in csv file 
-var end_date = 20190618; // should be last date in the csv file 
+var start_date = "20190318"; // has to be smaller than last date in csv file 
+var end_date = "20190618"; // should be last date in the csv file 
 var trends_start_date; // for passing start to goog trends widget 
 var trends_end_date;
 
-// $("#slider").dateRangeSlider({ //date range slider setup max and min dates the $ in front just means it's jquery 
-// bounds:{
-//   min: new Date(2018, 05, 18), // ***need to make sure we have the data within this max min range****   
-//   max: new Date(2019, 05, 18) // these dates are objects not strings and month starts zero so subtract one from the month number
-//   }
-// });
-// $("#slider").dateRangeSlider("values", new Date(2019, 02, 18), new Date(2019, 05, 18)); // this sets the default values of the slider tab (and chart) 
-
-
+$("#slider").dateRangeSlider({ //date range slider setup max and min dates the $ in front just means it's jquery 
+ bounds:{
+   min: new Date(2018, 05, 18), // ***need to make sure we have the data within this max min range****   
+   max: new Date(2019, 05, 18) // these dates are objects not strings and month starts zero so subtract one from the month number
+   }
+ });
+ $("#slider").dateRangeSlider("values", new Date(2019, 02, 18), new Date(2019, 05, 18)); // this sets the default values of the slider tab (and chart) 
 
 function makeResponsive() {
 
@@ -36,11 +34,6 @@ function makeResponsive() {
   const candle_win_ratio = 4/5;
   const volume_win_ratio = 1/4;
 
-
-  // Parse the date / time
-  //var parseDate = d3.timeParse("%e %b %y"); // this is D3v4 version, hopefully works 
-
-
   //Clear SVG --> required for "make responsive" function
   var svgArea = d3.select("#svg-area").select("svg");
 
@@ -54,7 +47,6 @@ function makeResponsive() {
     .append("svg")
     .attr("height", svgHeight)
     .attr("width", svgWidth); 
-
   
   // Create a chart group for the Indicator Chart
   var IndicatorChartGroup = svg.append("g");
@@ -62,7 +54,6 @@ function makeResponsive() {
   // Create a chart group for the Indicator Chart
   var CandleChartGroup = svg.append("g");
  
-
   // CREATE FUNCTIONS
 
   // function used for updating indicator scale variable upon click on indicator axis label
@@ -165,8 +156,9 @@ function makeResponsive() {
 
   //var formatTime = d3.timeFormat("%e-%b-%y"); // output Jan 1, 2014
   //formatTime(new Date); // "June 30, 2015"
-  // var parseDate = d3.timeParse("%Y%m%d"); //input 20180926 format   
-  var parseDate2 = d3.timeParse("%Y-%m-%d"); //input 20180926 format 
+  var parseDate = d3.timeParse("%Y%d%e"); //  
+  //var parseDate = d3.timeParse("%Y%m%d"); //input 20180926 format   
+  //var parseDate2 = d3.timeParse("%Y-%m-%d"); //I think this is for drop down datepicker 
 
   // var startdate = parseDate(start_date);
   // var enddate = parseDate(end_date);
@@ -237,7 +229,6 @@ function makeResponsive() {
     // calculate length of data
     data_length = date_alldata.length;
  
-
     // loop through and only pick-up data within start- and end- date
     for (i = 0; i < data_length; i++) {
 
@@ -522,18 +513,18 @@ function makeResponsive() {
     else if (chosenIaxis === "finex_leveraged_longs") {
       var ind_values = finex_leveraged_longs;
     }
-    else if (chosenIaxis === "finex_volume") {
-      var ind_values = finex_volume;
-    }
+    //else if (chosenIaxis === "finex_volume") {
+    //  var ind_values = finex_volume;
+    //}
     else if (chosenIaxis === "bitcoin_dominance") {
       var ind_values = bitcoin_dominance;
     }
-    else if (chosenIaxis === "rolling_20_d") {
-      var ind_values = rolling_20_d;
+   // else if (chosenIaxis === "rolling_20_d") {
+    //  var ind_values = rolling_20_d;
     // }
     // else if (chosenIaxis === "bitmex_funding"){
     //   var ind_values = bitmex_funding;
-    };
+    //};
 
     indicatorline = IndicatorChartGroup.selectAll("line");
         if(!indicatorline.empty()) {
@@ -854,36 +845,24 @@ function makeResponsive() {
         //   .classed("active", false)
         //   .classed("inactive", true);
         // }
-      }})
+      }}) //these brackets all look right to me ie match with my code but there is some error
   })
-
 };
 
-// //below is the call to the google trends library 
-// console.log("trends start and end", trends_start_date,trends_end_date);
-// //below commented out line is what I want to pass but I'm getting 404 error 
-// //trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"how to buy bitcoin","geo":"US","time":"2018-09-26 2019-06-18"}],"category":0,"property":""}, {"exploreQuery":"date=2018-09-26%202019-06-18&geo=US&q=how%20to%20buy%20bitcoin","guestPath":"https://trends.google.com:443/trends/embed/"});
-// trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"how to buy bitcoin","geo":"US","time":trends_start_date+" "+trends_end_date}],"category":0,"property":""}, {"exploreQuery":"date="+trends_start_date+"%"+trends_end_date+"&geo=US&q=how%20to%20buy%20bitcoin","guestPath":"https://trends.google.com:443/trends/embed/"});
-
-// // When the browser loads, makeResponsive() is called.
-// //
-// $("#slider").bind("valuesChanged", function(e, data){ //this is the date slider main loop - tried "valuesChanged" but waaay slow 
-    
-//   // all the logic here after the arrays generated, closing bracket at bottom
-//   //console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
-// //  var d = new Date(dateString);  //I think the data.values.min is in datestring format, need to 
-//   start_date=new Date(data.values.min);
-//   end_date=new Date(data.values.max);
-//   var new_date_parse= d3.timeFormat("%Y%m%%d");
-//   start_date=new_date_parse(start_date); 
-//   end_date=new_date_parse(end_date);
-//   //console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date));
-//   makeResponsive();
-// }); // this is from slider code 
-
+$("#slider").bind("valuesChanged", function(e, data){ //this is the date slider main loop - tried "valuesChanged" but waaay slow 
+  // all the logic here after the arrays generated, closing bracket at bottom
+  //console.log("inside slider value change: data.values:"+ data.values + "data.values.min:" +data.values.min + " and max: " + data.values.max); //data is an object 
+//  var d = new Date(dateString);  //I think the data.values.min is in datestring format, need to 
+start_date=new Date(data.values.min);
+end_date=new Date(data.values.max);
+var new_date_parse= d3.timeFormat("%Y%m%%d");
+start_date=new_date_parse(start_date); 
+end_date=new_date_parse(end_date);
+//console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date)); 
+makeResponsive();
+}); // this is from slider code 
 
 makeResponsive();
-
 // When the browser window is resized, makeResponsive() is called.
 d3.select(window).on("resize", makeResponsive);
 //console.log("gets to the very end ");
