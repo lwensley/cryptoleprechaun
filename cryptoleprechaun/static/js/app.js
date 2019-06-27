@@ -212,8 +212,10 @@ function makeResponsive() {
     var low_alldata = data["low"];
     var volume_alldata = data["unit_volume"];
     var finex_shorts_alldata = data["bitfinex_shorts"];
-    // finex_leveraged_longs_alldata = data["bitfinex_longs"];
+    var finex_leveraged_longs_alldata = data["bitfinex_longs"];
+    var finex_volume_alldata = data["bitfinex_volume"];
     var bitcoin_dominance_alldata = data["bitcoin_dominance"];
+    var rolling_20_d_alldata = data["rolling_20_d"];
     // bitmex_funding_alldata = data["bitmex_funding"];
 
 
@@ -226,8 +228,10 @@ function makeResponsive() {
     var low = [];
     var volume = [];
     var finex_shorts = []; 
-    // var finex_leveraged_longs = [];
+    var finex_leveraged_longs = [];
+    var finex_volume = [];
     var bitcoin_dominance = [];
+    var rolling_20_d = [];
     // var bitmex_funding = []
 
     // calculate length of data
@@ -246,8 +250,10 @@ function makeResponsive() {
             low.push(low_alldata[i]);
             volume.push(volume_alldata[i]);
             finex_shorts.push(finex_shorts_alldata[i]);
-            // finex_leveraged_longs.push(finex_leveraged_longs_alldata[i]);
+            finex_leveraged_longs.push(finex_leveraged_longs_alldata[i]);
+            finex_volume.push(finex_volume_alldata[i]);
             bitcoin_dominance.push(bitcoin_dominance_alldata[i]);
+            rolling_20_d.push(rolling_20_d_alldata[i]);
             // bitmex_funding.push(bitmex_funding_alldata[i]);
         }
       }
@@ -277,8 +283,10 @@ function makeResponsive() {
               "low": low[i],
               "volume": volume[i],
               "bitfinex_shorts": finex_shorts[i],
-              // "finex_leveraged_longs": finex_leveraged_longs[i],
-              "bitcoin_dominance": bitcoin_dominance[i]
+              "finex_leveraged_longs": finex_leveraged_longs[i],
+              "finex_volume": finex_volume[i],
+              "bitcoin_dominance": bitcoin_dominance[i],
+              "rolling_20_d": rolling_20_d[i],
               // "bitmex_funding": bitmex_funding[i]
       }
       selectdata.push(datai)
@@ -286,7 +294,7 @@ function makeResponsive() {
 
     // console.log(selectdata)
 
-    console.log(d3.max(selectdata, d => d["bitcoin_dominance"]))
+    // console.log(d3.max(selectdata, d => d["bitcoin_dominance"]))
 
 
       // //need to put start_date and end_date into right format for google trends widget  
@@ -505,13 +513,26 @@ function makeResponsive() {
       
     }
 
+
     // INITIAL INDICATOR LINES
 
     if (chosenIaxis === "bitfinex_shorts") {
       var ind_values = finex_shorts;
     }
-    else {
+    else if (chosenIaxis === "finex_leveraged_longs") {
+      var ind_values = finex_leveraged_longs;
+    }
+    else if (chosenIaxis === "finex_volume") {
+      var ind_values = finex_volume;
+    }
+    else if (chosenIaxis === "bitcoin_dominance") {
       var ind_values = bitcoin_dominance;
+    }
+    else if (chosenIaxis === "rolling_20_d") {
+      var ind_values = rolling_20_d;
+    // }
+    // else if (chosenIaxis === "bitmex_funding"){
+    //   var ind_values = bitmex_funding;
     };
 
     indicatorline = IndicatorChartGroup.selectAll("line");
@@ -559,16 +580,48 @@ function makeResponsive() {
     var indicator_2_label = ilabelsGroup.append("text")//indicator_2 axis right side
       .attr("x",0)         // set x position of left side of text
       .attr("y", 40) // set y position of bottom of text
+      .attr("value", "finex_leveraged_longs")
+      .style("font", "12px sans-serif")
+      .classed("inactive", true)
+      .text("Longs");
+
+    var indicator_3_label = ilabelsGroup.append("text")//indicator_2 axis right side
+      .attr("x",0)         // set x position of left side of text
+      .attr("y", 60) // set y position of bottom of text
+      .attr("value", "finex_volume")
+      .style("font", "12px sans-serif")
+      .classed("inactive", true)
+      .text("TE");
+
+    var indicator_4_label = ilabelsGroup.append("text")//indicator_2 axis right side
+      .attr("x",0)         // set x position of left side of text
+      .attr("y", 80) // set y position of bottom of text
       .attr("value", "bitcoin_dominance")
       .style("font", "12px sans-serif")
       .classed("inactive", true)
       .text("Bitcoin Dominance (% of total cap)");
 
+    var indicator_5_label = ilabelsGroup.append("text")//indicator_2 axis right side
+      .attr("x",0)         // set x position of left side of text
+      .attr("y", 100) // set y position of bottom of text
+      .attr("value", "rolling_20_d")
+      .style("font", "12px sans-serif")
+      .classed("inactive", true)
+      .text("Rolling 20 day");
+
+    // var indicator_6_label = ilabelsGroup.append("text")//indicator_2 axis right side
+    //   .attr("x",0)         // set x position of left side of text
+    //   .attr("y", 40) // set y position of bottom of text
+    //   .attr("value", "bitmex_funding")
+    //   .style("font", "12px sans-serif")
+    //   .classed("inactive", true)
+    //   .text("Bitmex funding");
+
     var Legend = ilabelsGroup.append("text")
       .attr("x", indicator_win_width)         // set x position of left side of text
       .attr("y", 20) // set y position of bottom of text
-      .attr("value", "bitfinex_shorts")
       .style("font", "12px sans-serif")
+      .classed("active", true)
       .text("NOTE: Green indicates that the <br> close value for that date is higher <br> than the close value for the previous day. <br> Red indicates the opposite");
 
 
@@ -637,16 +690,119 @@ function makeResponsive() {
         indicator_2_label
             .classed("active", false)
             .classed("inactive", true);
-        }
-        else if (chosenIaxis === "bitcoin_dominance"){
-        indicator_1_label
+        indicator_3_label
             .classed("active", false)
             .classed("inactive", true);
-        indicator_2_label
-            .classed("active", true)
-            .classed("inactive", false);
+        indicator_4_label
+            .classed("active", false)
+            .classed("inactive", true);
+        indicator_5_label
+            .classed("active", false)
+            .classed("inactive", true);
+        indicator_6_label
+            .classed("active", false)
+            .classed("inactive", true);
         }
-  
+        else if (chosenIaxis === "finex_leveraged_longs"){
+        indicator_2_label
+          .classed("active", true)
+          .classed("inactive", false);
+        indicator_1_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_3_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_4_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_5_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_6_label
+          .classed("active", false)
+          .classed("inactive", true);
+        }
+        else if (chosenIaxis === "finex_volume"){
+        indicator_3_label
+          .classed("active", true)
+          .classed("inactive", false);
+        indicator_1_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_2_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_4_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_5_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_6_label
+          .classed("active", false)
+          .classed("inactive", true);
+        }
+        else if (chosenIaxis === "bitcoin_dominance"){
+        indicator_4_label
+          .classed("active", true)
+          .classed("inactive", false);
+        indicator_1_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_2_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_3_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_5_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_6_label
+          .classed("active", false)
+          .classed("inactive", true);
+        }
+        else if (chosenIaxis === "rolling_20_d"){
+        indicator_5_label
+          .classed("active", true)
+          .classed("inactive", false);
+        indicator_1_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_2_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_4_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_5_label
+          .classed("active", false)
+          .classed("inactive", true);
+        indicator_6_label
+          .classed("active", false)
+          .classed("inactive", true);
+        }
+        // else if (chosenIaxis === "bitmex_funding"){
+        // indicator_6_label
+        //   .classed("active", true)
+        //   .classed("inactive", false);
+        // indicator_1_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
+        // indicator_2_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
+        // indicator_3_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
+        // indicator_4_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
+        // indicator_5_label
+        //   .classed("active", false)
+        //   .classed("inactive", true);
+        // }
       }})
   })
 
