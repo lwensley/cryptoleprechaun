@@ -844,7 +844,7 @@ function makeResponsive() {
         // }
       }}) //these brackets all look right to me ie match with my code but there is some error
   })
-};
+//}; trying this further down, uncomment
 
 $("#slider").bind("valuesChanged", function(e, data){ //this is the date slider main loop - tried "valuesChanged" but waaay slow 
   // all the logic here after the arrays generated, closing bracket at bottom
@@ -858,7 +858,7 @@ end_date=new_date_parse(end_date);
 //console.log("***new START DATE", start_date,"start date typeof", typeof(start_date), "END date", end_date,"end type:", typeof(end_date)); 
 makeResponsive();
 }); // this is from slider code 
-
+})//this is new 3PM 6-27 remove and uncomment 847 
 makeResponsive();
 // When the browser window is resized, makeResponsive() is called.
 d3.select(window).on("resize", makeResponsive);
