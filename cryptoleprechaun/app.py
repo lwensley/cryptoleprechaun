@@ -97,7 +97,6 @@ def selected_btcdata():
         BTC_Data.bitfinex_volume,
         BTC_Data.total_crypto_cap,
         BTC_Data.bitcoin_dominance,
-        BTC_Data.bitmex_funding
     ]
 
     # results = db.session.query(*sel).filter(BTC_Data.date >= start).filter(BTC_Data <= end).all()
@@ -105,12 +104,39 @@ def selected_btcdata():
     print(results)
 
     # Create a dictionary entry for each row of metadata
+    bitcoin_data = {}
+
+    # for result in results:
+    #     bitcoin_data.update(result)
+
+
+    # for result in results:
+    #     for i in result:
+    #         bitcoin_data["date"] = result[0]
+    #         bitcoin_data["open"] = results[result[1]]
+    #         bitcoin_data["high"] = results[result[2]]
+    #         bitcoin_data["low"] = results[result[3]]
+    #         bitcoin_data["close"] = results[result[4]]
+    #         # bitcoin_data["volume"] = results[5]
+    #         bitcoin_data["market_cap"] = results[result[6]]
+    #         bitcoin_data["unit_volume"] = results[result[7]]
+    #         bitcoin_data["rolling_20_d"] = results[result[8]]
+    #         bitcoin_data["date_2"] = results[result[9]]
+    #         bitcoin_data["bitfinex_shorts"] = results[result[10]]
+    #         bitcoin_data["bitfinex_longs"] = results[result[11]]
+    #         bitcoin_data["bitfinex_volume"] = results[result[12]]
+    #         bitcoin_data["total_crypto_cap"] = results[result[13]]
+    #         # bitcoin_data["bitcoin_dominance"] = results[result[14]]
+
+
+
+####
     date = [result[0] for result in results]
-    open = [result[1] for result in results]
+    Open = [result[1] for result in results]
     high = [result[2] for result in results]
     low = [result[3] for result in results]
     close = [result[4] for result in results]
-    volume = [result[5] for result in results]
+    # volume = [result[5] for result in results]
     market_cap = [result[6] for result in results]
     unit_volume = [result[7] for result in results]
     rolling_20_d = [result[8] for result in results]
@@ -119,16 +145,15 @@ def selected_btcdata():
     bitfinex_longs = [result[11] for result in results]
     bitfinex_volume = [result[12] for result in results]
     total_crypto_cap = [result[13] for result in results]
-    bitcoin_dominance = [result[14] for result in results]
-    bitmex_funding = [result[15] for result in results]
+    # bitcoin_dominance = [result[14] for result in results]
     
     bitcoin_data = [{
         "date": date,
-        "open": open,
+        "open": Open,
         "high": high,
         "low": low,
         "close": close,
-        "volume": volume,
+        # "volume": volume,
         "market_cap": market_cap,
         "unit_volume": unit_volume,
         "rolling_20_d": rolling_20_d,
@@ -137,11 +162,51 @@ def selected_btcdata():
         "bitfinex_longs": bitfinex_longs,
         "bitfinex_volume": bitfinex_volume,
         "total_crypto_cap": total_crypto_cap,
-        "bitcoin_dominance": bitcoin_dominance,
-        "bitmex_funding": bitmex_funding,
+        # "bitcoin_dominance": bitcoin_dominance,
     }]
 
-    print(bitcoin_data)
+
+####
+    # for i in len(date):
+        # date = result[0]
+        # Open = result[1]
+        # high = result[2]
+        # low = result[3]
+        # close = result[4]
+        # # volume = [result[5]]
+        # market_cap = result[6]
+        # unit_volume = result[7]
+        # rolling_20_d = result[8]
+        # date_2 = result[9]
+        # bitfinex_shorts = result[10]
+        # bitfinex_longs = result[11]
+        # bitfinex_volume = result[12]
+        # total_crypto_cap = result[13]
+        # # bitcoin_dominance = [result[14] for result in results]
+    
+        # bitcoin_data_result = {
+        #     "date": date[i],
+        #     "open": Open[i],
+        #     "high": high[i],
+        #     "low": low[i],
+        #     "close": close[i],
+        #     # "volume": volume[i],
+        #     "market_cap": market_cap[i],
+        #     "unit_volume": unit_volume[i],
+        #     "rolling_20_d": rolling_20_d[i],
+        #     "date_2": date_2[i],
+        #     "bitfinex_shorts": bitfinex_shorts[i],
+        #     "bitfinex_longs": bitfinex_longs[i],
+        #     "bitfinex_volume": bitfinex_volume[i],
+        #     "total_crypto_cap": total_crypto_cap[i],
+        #     # "bitcoin_dominance": bitcoin_dominance[i],
+        # }
+
+        # bitcoin_data.update(bitcoin_data_result)
+
+
+
+    # print(bitcoin_data)
     return jsonify(bitcoin_data)
 
 if __name__ == "__main__":
