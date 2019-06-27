@@ -112,7 +112,7 @@ function makeResponsive() {
       .html(function(d) { 
         // console.log(d)
         // return (`${d.date}<br>${labeli} ${d[chosenIaxis]}<br>${labeli} ${d[chosenIaxis]}`);
-        return (`${labeli} <br> ${d.date} ${ind_values[i]}`);
+        return (`${labeli} <br> ${d.date[i]} ${ind_values[i]}`);
       });
 
     iLinesGroup.call(toolTip);
@@ -134,7 +134,7 @@ function makeResponsive() {
 
 
   // get data from CSV and parse the date 
-  d3.csv(".db/7mos_test_data.csv").then( function(data)  {
+  d3.json(`/btc_data`).then( function(data)  {
     
     var low=[];
     var open=[];
