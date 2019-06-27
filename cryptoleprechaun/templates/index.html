@@ -17,10 +17,10 @@
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/style.css') }}">
   <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/bootstrap.min.css') }}">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.js"></script>
-  <link rel="stylesheet" href="iThing.css" type="text/css" />
-  <script src="jquery.js"></script>
-  <script src="jquery-ui.js"></script>
-  <script src="jQDateRangeSlider-min.js"></script>  
+  <link rel="stylesheet" href= "{{ url_for('static',filename='css/iThing.css') }}">
+  <script type="text/javascript" src="../static/js/jquery.js"></script>
+  <script src="/static/js/jquery-ui.js"></script>
+  <script src="/static/js/jQDateRangeSlider-min.js"></script>  
   
   
 </head>
@@ -93,7 +93,7 @@
         <h5>Select Date Range</h5>
       </div> -->
       <div class="col-md-3">
-        <h5 style="background: #43464b">Select Date Range</h5>
+        <h5>Select Date Range</h5>
           <div id="reportrange" style="background-color:#fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
             <i class="fa fa-calendar"></i>&nbsp;
             <span></span> <i class="fa fa-caret-down"></i>
