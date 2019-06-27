@@ -229,9 +229,11 @@ function makeResponsive() {
  
     // loop through and only pick-up data within start- and end- date
     for (i = 0; i < data_length; i++) {
-    console.log("date_alldata[i] then typeof", date_alldata[i], typeof(date_alldata[i]));
+    console.log("date_alldata[i] then typeof then start_date, end_date + typeof x2 ", date_alldata[i], typeof(date_alldata[i]), start_date, end_date, typeof(start_date), typeof(end_date));
       if (date_alldata[i] >= start_date) {
+       console.log("date_alldata[i] >= start_date");
         if (date_alldata[i] <= end_date) {
+         console.log("date_alldata[i] <= end_date");
             date.push(date_alldata[i]);
             open.push(open_alldata[i]);
             close.push(close_alldata[i]);
