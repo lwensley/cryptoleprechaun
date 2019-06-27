@@ -568,6 +568,7 @@ function makeResponsive() {
 
     var ilabelsGroup = IndicatorChartGroup.append("g")
           .attr("transform", `translate(${margin.left}, ${(candle_win_height + indicator_win_height + margin.top+15)})`)
+          .attr("text-anchor", "end")
 
     var indicator_1_label = ilabelsGroup.append("text")
       .attr("x", 0)         // set x position of left side of text
