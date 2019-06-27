@@ -77,28 +77,34 @@ def names():
     return jsonify(list(df.columns)[2:])
 
 
-from .datatable import data
+# Need to add in the path for once we select the data
+@app.route("/btc_data")
+def selected_btcdata():
+    # Return the data for the selected dates
+    sel = [
+        BTC_Data.date,
+        BTC_Data.open,
+        BTC_Data.high,
+        BTC_Data.low,
+        BTC_Data.close,
+        BTC_Data.volume,
+        BTC_Data.market_cap,
+        BTC_Data.unit_volume,
+        BTC_Data.rolling_20_d,
+        BTC_Data.date_2,
+        BTC_Data.bitfinex_shorts,
+        BTC_Data.bitfinex_longs,
+        BTC_Data.bitfinex_volume,
+        BTC_Data.total_crypto_cap,
+        BTC_Data.bitcoin_dominance,
+        BTC_Data.bitmex_funding
+    ]
 
-@app.route("/api/data")
-def data():
+    # results = db.session.query(*sel).filter(BTC_Data.date >= start).filter(BTC_Data <= end).all()
+    results = db.session.query(*sel).all()
+    print(results)
 
-    results = db.session.query(DataTable.date,
-                                DataTable.open,
-                                DataTable.high,
-                                DataTable.low,
-                                DataTable.close,
-                                DataTable.volume,
-                                DataTable.market_cap,
-                                DataTable.unit_volume,
-                                DataTable.rolling_20_d,
-                                DataTable.date_2,
-                                DataTable.bitfinex_shorts,
-                                DataTable.bitfinex_longs,
-                                DataTable.bitfinex_volume,
-                                DataTable.total_crypto_cap,
-                                DataTable.bitcoin_dominance,
-                                DataTable.bitmex_funding).all()
-
+    # Create a dictionary entry for each row of metadata
     date = [result[0] for result in results]
     open = [result[1] for result in results]
     high = [result[2] for result in results]
@@ -135,44 +141,8 @@ def data():
         "bitmex_funding": bitmex_funding,
     }]
 
+    print(bitcoin_data)
     return jsonify(bitcoin_data)
-
-
-
-
-# Need to add in the path for once we select the data
-@app.route("/btc_data")
-def selected_btcdata():
-    # Return the data for the selected dates
-    sel = [
-        BTC_Data.date,
-        BTC_Data.open,
-        BTC_Data.high,
-        BTC_Data.low,
-        BTC_Data.close,
-        BTC_Data.volume,
-        BTC_Data.market_cap,
-        BTC_Data.unit_volume,
-        BTC_Data.rolling_20_d,
-        BTC_Data.date_2,
-        BTC_Data.bitfinex_shorts,
-        BTC_Data.bitfinex_longs,
-        BTC_Data.bitfinex_volume,
-        BTC_Data.total_crypto_cap,
-        BTC_Data.bitcoin_dominance,
-        BTC_Data.bitmex_funding
-    ]
-
-    # results = db.session.query(*sel).filter(BTC_Data.date >= start).filter(BTC_Data <= end).all()
-    results = db.session.query(*sel).all()
-    print(results)
-    # Create a dictionary entry for each row of metadata
-    selected_btcdata = {}
-    for result in results:
-        BTC_Data
-    
-    print(selected_btcdata)
-    return jsonify(selected_btcdata)
 
 if __name__ == "__main__":
     app.run()
