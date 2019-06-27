@@ -626,7 +626,7 @@ function makeResponsive() {
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 20) // set y position of bottom of text
       .style("font", "12px sans-serif")
-      .style("fill", grey)
+      .style("fill", "grey")
       .attr("text-anchor", "start")
       .classed("active", true)
       .text("NOTE: Green indicates that the");
@@ -635,7 +635,7 @@ function makeResponsive() {
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 35) // set y position of bottom of text
       .style("font", "12px sans-serif")
-      .style("fill", grey)
+      .style("fill", "grey")
       .attr("text-anchor", "start")
       .classed("active", true)
       .text("close value for that date is higher");
@@ -644,7 +644,7 @@ function makeResponsive() {
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 50) // set y position of bottom of text
       .style("font", "12px sans-serif")
-      .style("fill", grey)
+      .style("fill", "grey")
       .attr("text-anchor", "start")
       .classed("active", true)
       .text("than the close value for the previous day.");
@@ -653,7 +653,7 @@ function makeResponsive() {
       .attr("x", indicator_win_width * 3/4)         // set x position of left side of text
       .attr("y", 65) // set y position of bottom of text
       .style("font", "12px sans-serif")
-      .style("fill", grey)
+      .style("fill","grey")
       .attr("text-anchor", "start")
       .classed("active", true)
       .text("Red indicates the opposite.");
